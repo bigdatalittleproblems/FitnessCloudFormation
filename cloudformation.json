@@ -15,7 +15,7 @@
         "setS3ToPublic": {
             "Fn::Equals": [
                 {
-                    "Ref": "Parameters"
+                    "Ref": "setBucketPublic"
                 },
                 "True"
             ]
@@ -41,42 +41,34 @@
                 },
                 "PolicyName": "s3readandwrite",
                 "Roles": [
-                    {
-                        "Ref": "lambdaFitIamRole"
-                    }
+                    
+                        "lambdaFitIamRole"
+                    
                 ]
             },
             "Metadata": {
                 "AWS::CloudFormation::Designer": {
                     "id": "761b82ed-c837-44aa-8ab2-c2669ffe6d08"
                 }
-            }
-        },
-        "lambdaFitIamRole": {
-            "Type": "AWS::IAM::Role",
-            "Properties": {
-                "AssumeRolePolicyDocument": {},
-                "Path": "",
-                "Policies": []
             },
-            "Metadata": {
-                "AWS::CloudFormation::Designer": {
-                    "id": "2423d756-e3c8-4c57-bea3-f0403e136ddb"
-                }
-            }
+            "DependsOn": [
+                "lambdaFunctionFit"
+            ]
         },
         "s3BucketFitOrigin": {
             "Type": "AWS::S3::Bucket",
             "Properties": {
-                "Tags": ["FitParser"],
-                "Event":"s3:ObjectCreated:Put",
-                "Function":
-                { "Ref": "lambdaFunctionFit" },
-                "Filter":{
-                    "Name" : "suffix",
-                    "Value" : ".fit"
-                  }
-                  
+                "Tags": [
+                    "FitParser"
+                ],
+                "Event": "s3:ObjectCreated:Put",
+                "Function": {
+                    "Ref": "lambdaFunctionFit"
+                },
+                "Filter": {
+                    "Name": "suffix",
+                    "Value": ".fit"
+                }
             },
             "Metadata": {
                 "AWS::CloudFormation::Designer": {
@@ -87,7 +79,9 @@
         "s3BucketFitDest": {
             "Type": "AWS::S3::Bucket",
             "Properties": {
-                "Tags": ["FitParser"]
+                "Tags": [
+                    "FitParser"
+                ]
             },
             "Metadata": {
                 "AWS::CloudFormation::Designer": {
@@ -99,7 +93,6 @@
             "Type": "AWS::S3::BucketPolicy",
             "Condition": "setS3ToPublic",
             "Properties": {
-                "Bucket": "",
                 "PolicyDocument": {
                     "Id": "Policy1611725926861",
                     "Version": "2012-10-17",
@@ -117,7 +110,7 @@
                 }
             },
             "DependsOn": [
-                "s3BucketFit"
+                "s3BucketFitDest"
             ],
             "Metadata": {
                 "AWS::CloudFormation::Designer": {
@@ -145,9 +138,6 @@
                 },
                 "Description": "Lambda Function that takes .fit files from bucket and converts it to a csv for later analysis"
             },
-            "DependsOn": [
-                "iamPolicy"
-            ],
             "Metadata": {
                 "AWS::CloudFormation::Designer": {
                     "id": "a04849ad-714a-4e31-955f-42c5dced17d9"
@@ -171,32 +161,6 @@
             "Metadata": {
                 "AWS::CloudFormation::Designer": {
                     "id": "11ffb97b-2660-41a1-ab00-13580542c07d"
-                }
-            }
-        },
-        "LambdaTrigger": {
-            "Type": "Custom::LambdaTrigger",
-            "Properties": {
-                "ServiceToken": {
-                    "Fn::GetAtt": [
-                        "lambdaFunctionFit",
-                        "Arn"
-                    ]
-                },
-                "LambdaArn": {
-                    "Fn::GetAtt": [
-                        "lambdaFunctionFit",
-                        "Arn"
-                    ]
-                },
-                "Bucket": {
-                    "Ref": "s3BucketFitOrigin"
-                },
-                "DependsOn": "LambdaInvokePermission"
-            },
-            "Metadata": {
-                "AWS::CloudFormation::Designer": {
-                    "id": "6a9daec7-8214-4e46-ba5f-39b0661f5f00"
                 }
             }
         }
@@ -228,6 +192,9 @@
                 "embeds": [],
                 "isassociatedwith": [
                     "2423d756-e3c8-4c57-bea3-f0403e136ddb"
+                ],
+                "dependson": [
+                    "a04849ad-714a-4e31-955f-42c5dced17d9"
                 ]
             },
             "a04849ad-714a-4e31-955f-42c5dced17d9": {
@@ -240,22 +207,7 @@
                     "y": 90
                 },
                 "z": 1,
-                "embeds": [],
-                "dependson": [
-                    "761b82ed-c837-44aa-8ab2-c2669ffe6d08"
-                ]
-            },
-            "6a9daec7-8214-4e46-ba5f-39b0661f5f00": {
-                "size": {
-                    "width": 60,
-                    "height": 60
-                },
-                "position": {
-                    "x": 300,
-                    "y": 210
-                },
-                "z": 1,
-                "embeds": [] 
+                "embeds": []
             },
             "11ffb97b-2660-41a1-ab00-13580542c07d": {
                 "size": {
@@ -279,7 +231,10 @@
                     "y": 90
                 },
                 "z": 1,
-                "embeds": []
+                "embeds": [],
+                "dependson": [
+                    "fbb1dbe5-bc4d-4b46-a72d-6bd541f02209"
+                ]
             },
             "fbb1dbe5-bc4d-4b46-a72d-6bd541f02209": {
                 "size": {
@@ -287,8 +242,8 @@
                     "height": 60
                 },
                 "position": {
-                    "x": 180,
-                    "y": 90
+                    "x": 160,
+                    "y": 80
                 },
                 "z": 1,
                 "embeds": []
@@ -304,6 +259,28 @@
                 },
                 "z": 1,
                 "embeds": []
+            },
+            "9857ee58-c5d5-474d-af44-0154e03a760c": {
+                "source": {
+                    "id": "761b82ed-c837-44aa-8ab2-c2669ffe6d08",
+                    "selector": "g:nth-child(1) g:nth-child(4) g:nth-child(4) circle:nth-child(1)     ",
+                    "port": "AWS::DependencyLink-*"
+                },
+                "target": {
+                    "id": "a04849ad-714a-4e31-955f-42c5dced17d9"
+                },
+                "z": 3
+            },
+            "2ae14af5-f232-417c-ae92-b92b8d2b4ea0": {
+                "source": {
+                    "id": "761b82ed-c837-44aa-8ab2-c2669ffe6d08",
+                    "selector": "g:nth-child(1) g:nth-child(4) g:nth-child(4) circle:nth-child(1)     ",
+                    "port": "AWS::DependencyLink-*"
+                },
+                "target": {
+                    "id": "a04849ad-714a-4e31-955f-42c5dced17d9"
+                },
+                "z": 3
             }
         }
     }
