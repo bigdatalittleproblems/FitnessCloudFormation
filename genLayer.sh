@@ -1,6 +1,6 @@
 #!/bin/bash
-python3.7 -m venv pandas
+python3.8 -m venv pandas
 source pandas/bin/activate
-pip install pandas fitparse  -t ./python
+pip3.8 install pandas fitparse  -t ./Layer
 deactivate
-zip -r python.zip ./python/
+zip -r Layer.zip ./Layer/
