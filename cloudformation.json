@@ -50,10 +50,7 @@
                 "AWS::CloudFormation::Designer": {
                     "id": "761b82ed-c837-44aa-8ab2-c2669ffe6d08"
                 }
-            },
-            "DependsOn": [
-                "lambdaFunctionFit"
-            ]
+            }
         },
         "s3BucketFitOrigin": {
             "Type": "AWS::S3::Bucket",
@@ -132,14 +129,14 @@
                     ]
                 }
             },
-            "DependsOn": [
-                "s3BucketFitDest"
-            ],
             "Metadata": {
                 "AWS::CloudFormation::Designer": {
                     "id": "5424b9b8-a7bf-4763-b444-eecd3e2fee6a"
                 }
-            }
+            },
+            "DependsOn": [
+                "s3BucketFitDest"
+            ]
         },
         "lambdaFunctionFit": {
             "Type": "AWS::Lambda::Function",
@@ -187,6 +184,23 @@
             "Metadata": {
                 "AWS::CloudFormation::Designer": {
                     "id": "5c3fb698-69b6-4765-8d8c-e42024b0e66a"
+                }
+            }
+        },
+        "lambdaFitLayer": {
+            "Type": "AWS::Lambda::LayerVersion",
+            "Properties": {
+                "Content": {
+                    "S3Bucket": "fitcfproject",
+                    "S3Key": "python.zip"
+                },
+                "Description": "String",
+                "LayerName": "String",
+                "LicenseInfo": "String"
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "288b79e8-e8bc-4eb5-96a8-f7f388933c3d"
                 }
             }
         },
@@ -296,8 +310,8 @@
                 },
                 "z": 1,
                 "embeds": [],
-                "dependson": [
-                    "1e766601-d7b0-4462-8d10-1b71a99c4548"
+                "isassociatedwith": [
+                    "683570a6-92ee-418d-a307-26601e506bc6"
                 ]
             },
             "683570a6-92ee-418d-a307-26601e506bc6": {
@@ -306,10 +320,32 @@
                     "height": 60
                 },
                 "position": {
-                    "x": 431,
-                    "y": 222
+                    "x": 420,
+                    "y": 210
                 },
-                "z": 0
+                "z": 1,
+                "embeds": []
+            },
+            "288b79e8-e8bc-4eb5-96a8-f7f388933c3d": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 390,
+                    "y": 90
+                },
+                "z": 1,
+                "embeds": []
+            },
+            "2abdb7fe-4923-4242-b73d-4bd1497c1bef": {
+                "source": {
+                    "id": "5424b9b8-a7bf-4763-b444-eecd3e2fee6a"
+                },
+                "target": {
+                    "id": "fbb1dbe5-bc4d-4b46-a72d-6bd541f02209"
+                },
+                "z": 2
             }
         }
     }
