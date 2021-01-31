@@ -1,0 +1,310 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "",
+    "Parameters": {
+        "setBucketPublic": {
+            "Type": "String",
+            "Default": "False",
+            "AllowedValues": [
+                "False",
+                "True"
+            ]
+        }
+    },
+    "Conditions": {
+        "setS3ToPublic": {
+            "Fn::Equals": [
+                {
+                    "Ref": "Parameters"
+                },
+                "True"
+            ]
+        }
+    },
+    "Resources": {
+        "lambdaFitIamPolicy": {
+            "Type": "AWS::IAM::Policy",
+            "Properties": {
+                "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "s3:Get*",
+                                "s3:List*",
+                                "s3:Put*"
+                            ],
+                            "Resource": "*"
+                        }
+                    ]
+                },
+                "PolicyName": "s3readandwrite",
+                "Roles": [
+                    {
+                        "Ref": "lambdaFitIamRole"
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "761b82ed-c837-44aa-8ab2-c2669ffe6d08"
+                }
+            }
+        },
+        "lambdaFitIamRole": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "AssumeRolePolicyDocument": {},
+                "Path": "",
+                "Policies": []
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "2423d756-e3c8-4c57-bea3-f0403e136ddb"
+                }
+            }
+        },
+        "s3BucketFitOrigin": {
+            "Type": "AWS::S3::Bucket",
+            "Properties": {
+                "Tags": ["FitParser"],
+                "Event":"s3:ObjectCreated:Put",
+                "Function":
+                { "Ref": "lambdaFunctionFit" },
+                "Filter":{
+                    "Name" : "suffix",
+                    "Value" : ".fit"
+                  }
+                  
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "f9623d01-475c-4a40-8c7b-753544cb3dd1"
+                }
+            }
+        },
+        "s3BucketFitDest": {
+            "Type": "AWS::S3::Bucket",
+            "Properties": {
+                "Tags": ["FitParser"]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "fbb1dbe5-bc4d-4b46-a72d-6bd541f02209"
+                }
+            }
+        },
+        "s3BucketPolicy": {
+            "Type": "AWS::S3::BucketPolicy",
+            "Condition": "setS3ToPublic",
+            "Properties": {
+                "Bucket": "",
+                "PolicyDocument": {
+                    "Id": "Policy1611725926861",
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Sid": "Stmt1611725924025",
+                            "Action": [
+                                "s3:GetObject"
+                            ],
+                            "Effect": "Allow",
+                            "Resource": "*",
+                            "Principal": "*"
+                        }
+                    ]
+                }
+            },
+            "DependsOn": [
+                "s3BucketFit"
+            ],
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "5424b9b8-a7bf-4763-b444-eecd3e2fee6a"
+                }
+            }
+        },
+        "lambdaFunctionFit": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+                "Code": {
+                    "S3Bucket": "fitcfproject",
+                    "S3Key": "python.zip"
+                },
+                "Handler": "lambda_function.lambda_handler",
+                "Role": "",
+                "Runtime": "python3.8",
+                "FunctionName": "processFitFile",
+                "MemorySize": 512,
+                "Timeout": 120,
+                "Environment": {
+                    "Dest_Bucket": {
+                        "Ref": "s3BucketFitDest"
+                    }
+                },
+                "Description": "Lambda Function that takes .fit files from bucket and converts it to a csv for later analysis"
+            },
+            "DependsOn": [
+                "iamPolicy"
+            ],
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "a04849ad-714a-4e31-955f-42c5dced17d9"
+                }
+            }
+        },
+        "LambdaInvokePermission": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+                "Action": "lambda:InvokeFunction",
+                "FunctionName": "",
+                "Principal": "",
+                "SourceAccount": "",
+                "SourceArn": {
+                    "Fn::GetAtt": [
+                        "lambdaFunctionFit",
+                        "Arn"
+                    ]
+                }
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "11ffb97b-2660-41a1-ab00-13580542c07d"
+                }
+            }
+        },
+        "LambdaTrigger": {
+            "Type": "Custom::LambdaTrigger",
+            "Properties": {
+                "ServiceToken": {
+                    "Fn::GetAtt": [
+                        "lambdaFunctionFit",
+                        "Arn"
+                    ]
+                },
+                "LambdaArn": {
+                    "Fn::GetAtt": [
+                        "lambdaFunctionFit",
+                        "Arn"
+                    ]
+                },
+                "Bucket": {
+                    "Ref": "s3BucketFitOrigin"
+                },
+                "DependsOn": "LambdaInvokePermission"
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "6a9daec7-8214-4e46-ba5f-39b0661f5f00"
+                }
+            }
+        }
+    },
+    "Metadata": {
+        "AWS::CloudFormation::Designer": {
+            "2423d756-e3c8-4c57-bea3-f0403e136ddb": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 60,
+                    "y": 210
+                },
+                "z": 1,
+                "embeds": []
+            },
+            "761b82ed-c837-44aa-8ab2-c2669ffe6d08": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 180,
+                    "y": 210
+                },
+                "z": 1,
+                "embeds": [],
+                "isassociatedwith": [
+                    "2423d756-e3c8-4c57-bea3-f0403e136ddb"
+                ]
+            },
+            "a04849ad-714a-4e31-955f-42c5dced17d9": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 300,
+                    "y": 90
+                },
+                "z": 1,
+                "embeds": [],
+                "dependson": [
+                    "761b82ed-c837-44aa-8ab2-c2669ffe6d08"
+                ]
+            },
+            "6a9daec7-8214-4e46-ba5f-39b0661f5f00": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 300,
+                    "y": 210
+                },
+                "z": 1,
+                "embeds": [] 
+            },
+            "11ffb97b-2660-41a1-ab00-13580542c07d": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 60,
+                    "y": 330
+                },
+                "z": 1,
+                "embeds": []
+            },
+            "5424b9b8-a7bf-4763-b444-eecd3e2fee6a": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 60,
+                    "y": 90
+                },
+                "z": 1,
+                "embeds": []
+            },
+            "fbb1dbe5-bc4d-4b46-a72d-6bd541f02209": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 180,
+                    "y": 90
+                },
+                "z": 1,
+                "embeds": []
+            },
+            "f9623d01-475c-4a40-8c7b-753544cb3dd1": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 150,
+                    "y": 300
+                },
+                "z": 1,
+                "embeds": []
+            }
+        }
+    }
+}
