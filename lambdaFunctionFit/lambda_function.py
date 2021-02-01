@@ -2,6 +2,8 @@ import json
 import boto3
 from fitparse import FitFile
 import pandas as pd
+import os
+destBucket = os.environ['Dest_Bucket']
 def fit_parse(fitDir):
     fitfile = FitFile(fitDir)
     dataOutput={}
@@ -37,11 +39,11 @@ def lambda_handler(event, context):
     x=json.loads(responseData)
     finalObjName=objectname.split('/')[-1].replace('.fit','.csv')
     activityName=objectname.split('/')[-1].replace('.fit','')
-    dataDestKey={'key':{"S":activityName},'bucket':{"S":bucketname}}
+    dataDestKey={'key':{"S":activityName},'bucket':{"S":destBucket}}
     for i in x:
-        destKey=f"processed/{i}/{finalObjName}"
+        destKey=f"{i}/{finalObjName}"
         print(destKey)
-        obj = s3.Object(bucketname,destKey)
+        obj = s3.Object(destBucket,destKey)
         obj.put(Body=x[i])
         dataDestKey[i]={"S":destKey}
     print(dataDestKey)

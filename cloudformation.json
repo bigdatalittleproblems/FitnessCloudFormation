@@ -196,7 +196,7 @@
                   "CompatibleRuntimes":["python3.8"],
                 "Content": {
                     "S3Bucket": "fitcfproject",
-                    "S3Key": "Layers.zip"
+                    "S3Key": "python.zip"
                 }            },
             "Metadata": {
                 "AWS::CloudFormation::Designer": {
