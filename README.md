@@ -1,5 +1,5 @@
 # FitnessCloudFormation Overview
-## This is a repository to launch and deploy a application on AWS that will allow you to upload any raw ".fit" activity file into an S3 Bucket and process the data to provide a CSV document. This will allow users to import the data and perform various analytics and visualizations. **Currently, this CloudFormation stack is only supported in AWS us-west-1**.   
+This is a repository to launch and deploy a application on AWS that will allow you to upload any raw ".fit" activity file into an S3 Bucket and process the data to provide a CSV document. This will allow users to import the data and perform various analytics and visualizations. **Currently, this CloudFormation stack is only supported in AWS us-west-1**.   
 
 # Building Layers and Lambda Function
 * You can find the Lambda Function in the lambdaFunctionFit directory
