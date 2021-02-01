@@ -143,8 +143,11 @@
             "Properties": {
                 "Code": {
                     "S3Bucket": "fitcfproject",
-                    "S3Key": "python.zip"
+                    "S3Key": "lambda_function.zip"
                 },
+                "Layers":[{
+                            "Ref": "lambdaFitLayer"
+                        }],
                 "Handler": "lambda_function.lambda_handler",
                 "Role": {
                     "Fn::GetAtt": [
@@ -190,14 +193,11 @@
         "lambdaFitLayer": {
             "Type": "AWS::Lambda::LayerVersion",
             "Properties": {
+                  "CompatibleRuntimes":["python3.8"],
                 "Content": {
                     "S3Bucket": "fitcfproject",
                     "S3Key": "python.zip"
-                },
-                "Description": "String",
-                "LayerName": "String",
-                "LicenseInfo": "String"
-            },
+                }            },
             "Metadata": {
                 "AWS::CloudFormation::Designer": {
                     "id": "288b79e8-e8bc-4eb5-96a8-f7f388933c3d"
