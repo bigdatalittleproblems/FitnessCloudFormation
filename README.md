@@ -13,5 +13,5 @@ docker rm <Name_Container>
 ```
 ## Resources
 You can dowload the Lambda Layers here and also the lambda_function 
-* [Link to Layers](https://fitcfproject.s3-us-west-1.amazonaws.com/python.zip)
-* [Link to lambda_function](https://fitcfproject.s3-us-west-1.amazonaws.com/lambda_function.zip)
+* [Download Layers](https://fitcfproject.s3-us-west-1.amazonaws.com/python.zip)
+* [Download lambda_function](https://fitcfproject.s3-us-west-1.amazonaws.com/lambda_function.zip)
