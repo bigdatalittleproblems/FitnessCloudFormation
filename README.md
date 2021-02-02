@@ -11,6 +11,18 @@ docker run --name <Name_Container> lamdalayer:latest
 docker cp <Name_Container>:python.zip .
 docker rm <Name_Container>
 ```
+## AWS CLI Deployment
+Deploy the CloudFormation Stack: 
+```
+aws cloudformation create-stack --stack-name <Name Your Stack> --template-url https://fitcfproject.s3-us-west-1.amazonaws.com/cloudformation.json  --region us-west-1 --capabilities CAPABILITY_IAM --parameters ParameterKey=setBucketPublic,ParameterValue=<Enter True or False>
+```
+
+Deploy the CloudFormation Stack: 
+```
+aws cloudformation delete-stack --stack-name <Name Your Stack> --region us-west-1 
+```
+
+
 ## Resources
 You can dowload the Lambda Layers here and also the lambda_function 
 * [Download Layers](https://fitcfproject.s3-us-west-1.amazonaws.com/python.zip)
