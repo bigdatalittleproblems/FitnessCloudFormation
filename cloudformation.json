@@ -143,7 +143,7 @@
             "Properties": {
                 "Code": {
                     "S3Bucket": "fitcfproject",
-                    "S3Key": "lambda_function.zip"
+                    "S3Key": "fitparse/lambda_function.zip"
                 },
                 "Layers":[{
                             "Ref": "lambdaFitLayer"
@@ -196,7 +196,7 @@
                   "CompatibleRuntimes":["python3.8"],
                 "Content": {
                     "S3Bucket": "fitcfproject",
-                    "S3Key": "python.zip"
+                    "S3Key": "layers/python.zip"
                 }            },
             "Metadata": {
                 "AWS::CloudFormation::Designer": {
