@@ -1,15 +1,15 @@
 FROM amazonlinux
 
-RUN amazon-linux-extras enable python3.8 && \
+RUN yum update -y && \
+    amazon-linux-extras enable python3.8 && \
     yum install -y python38 &&\
     yum install -y python3-pip && \
     yum install -y zip && \
     yum clean all
 
-RUN python3.8 -m pip install --upgrade pip && \
-    python3.8 -m pip install virtualenv
+COPY requirements.txt /home/ 
 
-COPY genLayer.sh .
-copy Requirements.txt . 
+RUN pip3.8 install -r /home/requirements.txt -t /home/Layers && \
+    zip -r python.zip /home/Layers
 
-RUN sh genLayer.sh
+

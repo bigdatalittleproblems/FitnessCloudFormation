@@ -8,7 +8,7 @@ You can make changes to the stack and even add layers
 ```
 docker build . -t lamdalayer:latest
 docker run --name <Name_Container> lamdalayer:latest 
-docker cp <Name_Container>:python.zip .
+docker cp <Name_Container>:/python.zip .
 docker rm <Name_Container>
 ```
 ## AWS CLI Deployment
