@@ -1,2 +1,4 @@
 fitparse
 pandas
+numpy
+matplotlib

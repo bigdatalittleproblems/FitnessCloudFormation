@@ -155,7 +155,7 @@
                         "Arn"
                     ]
                 },
-                "Runtime": "python3.7",
+                "Runtime": "python3.8",
                 "MemorySize": 512,
                 "Timeout": 120,
                 "Environment": {

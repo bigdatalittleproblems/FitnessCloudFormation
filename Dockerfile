@@ -9,7 +9,10 @@ RUN yum update -y && \
 
 COPY requirements.txt /home/ 
 
-RUN pip3.8 install -r /home/requirements.txt -t /home/Layers && \
-    zip -r python.zip /home/Layers
+RUN pip3.8 install -r /home/requirements.txt -t /home/python
+
+WORKDIR /home/
+
+RUN zip -r python.zip ./python
 
 
