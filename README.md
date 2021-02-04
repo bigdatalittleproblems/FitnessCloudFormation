@@ -26,4 +26,5 @@ aws cloudformation delete-stack --stack-name demostack --region us-west-1
 ## Resources
 You can dowload the Lambda Layers here and also the lambda_function 
 * [Download Layers](https://fitcfproject.s3-us-west-1.amazonaws.com/layers/python.zip)
-* [Download lambda_function](https://fitcfproject.s3-us-west-1.amazonaws.com/fitparse/lambda_function.zip)
+* [Download lambda_function for lambdaFunctionFit](https://fitcfproject.s3-us-west-1.amazonaws.com/fitparse/lambda_function.zip)
+* [Download lambda_function for lambdaFunctionMap](https://fitcfproject.s3-us-west-1.amazonaws.com/mapping/lambda_function.zip)
