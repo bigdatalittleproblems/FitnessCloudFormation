@@ -6,9 +6,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 
-destBucket = os.environ['Dest_Bucket']
-
-
 def semicirclestolatlong(semicircles):
     x = semicircles * (180 / (2 ** 31))
     return x
@@ -38,6 +35,6 @@ def lambda_handler(event, context):
 
     destKey = 'map/{}'.format(objKey)
     with open(fileName, 'rb') as file_obj:
-        obj = s3.Object(destBucket, destKey)
+        obj = s3.Object(bucketname, destKey)
         obj.put(Body=file_obj)
-    return {"statusCode": 200, "response": {"bucket": destBucket, "key": destKey}}
+    return {"statusCode": 200, "response": {"bucket": bucketname, "key": destKey}}
