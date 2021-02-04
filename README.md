@@ -7,9 +7,9 @@ You can make changes to the stack and even add layers
 * To build the layer on your own, you can use the Dockerfile to deploy a **amazonlinux** image and generate a layer that will be compatable with the Python 3.8 runtime. Below are the commands to run to build the layers Zip file using Dockers. Be sure to be in the root directory of this project to be able to run it, and replace <Name_Container> with whatever name you want to give the container.
 ```
 docker build . -t lamdalayer:latest
-docker run --name <Name_Container> lamdalayer:latest 
-docker cp <Name_Container>:/python.zip .
-docker rm <Name_Container>
+docker run --name Name_Layer_Container lamdalayer:latest 
+docker cp Name_Layer_Container:/home/python.zip .
+docker rm Name_Layer_Container
 ```
 ## AWS CLI Deployment
 Deploy the CloudFormation Stack: 

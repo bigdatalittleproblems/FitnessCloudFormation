@@ -1,4 +1,4 @@
-FROM amazonlinux
+FROM amazonlinux:2.0.20210126.0
 
 RUN yum update -y && \
     amazon-linux-extras enable python3.8 && \
@@ -9,10 +9,10 @@ RUN yum update -y && \
 
 COPY Requirements.txt /home/ 
 
-RUN pip3.8 install -r /home/requirements.txt -t /home/python
+RUN pip3.8 install -r /home/Requirements.txt -t /home/python
 
 WORKDIR /home/
 
-RUN zip -r python.zip ./python
+CMD  zip -r python.zip ./python
 
 
