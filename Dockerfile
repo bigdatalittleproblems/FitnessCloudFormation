@@ -7,7 +7,7 @@ RUN yum update -y && \
     yum install -y zip && \
     yum clean all
 
-COPY requirements.txt /home/ 
+COPY Requirements.txt /home/ 
 
 RUN pip3.8 install -r /home/requirements.txt -t /home/python
 
