@@ -10,7 +10,6 @@ def semicirclestolatlong(semicircles):
     x = semicircles * (180 / (2 ** 31))
     return x
 
-
 def mappingFunc(x, objectname):
     x['position_lat_conversion'] = semicirclestolatlong(x['position_lat'])
     x['position_long_conversion'] = semicirclestolatlong(x['position_long'])
