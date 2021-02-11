@@ -1,0 +1,41 @@
+version: 0.2
+
+env:
+  variables:
+    layers_s3: "s3://fitcfproject/layers/"
+    mapping_s3: "s3://fitcfproject/mapping/"
+    fitparse_s3: "s3://fitcfproject/fitparse/"
+
+phases:
+  install:
+    commands:
+      - apt update -y 
+      - apt-get install python3.8 -y 
+      - apt-get install -y python3-pip
+      - apt-get install -y zip 
+    finally:
+      - echo installed python3.8  
+  pre_build:
+    commands:
+      - echo Entered the pre_build phase...
+    finally:
+      - echo This always runs even if the login command fails 
+  build:
+    commands:
+      - ls
+      - pip3 install -r Requirements.txt -t /python
+      - zip -r pythonLayer.zip /python
+      - cd lambdaFunctionFit 
+      - zip -r lambda_function_Fit.zip lambda_function.py 
+      - cd ..
+      - cd lambdaMappingFit 
+      - zip -r lambda_function_Map.zip lambda_function.py 
+      - cd ..
+    finally:
+      - echo This always runs even if the install command fails
+  post_build:
+    commands:
+      - aws s3 cp pythonLayer.zip $layers_s3
+      - aws s3 cp ./lambdaFunctionFit/lambda_function_Fit.zip $fitparse_s3
+      - aws s3 cp ./lambdaMappingFit/lambda_function_Map.zip $mapping_s3
+      - echo "Python Functions have been copied to s3"
