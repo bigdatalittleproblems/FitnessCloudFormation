@@ -14,5 +14,3 @@ RUN pip3.8 install -r /home/Requirements.txt -t /home/python
 WORKDIR /home/
 
 CMD  zip -r python.zip ./python
-
-
