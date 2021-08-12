@@ -1,4 +1,3 @@
 fitparse
 pandas
-numpy
 matplotlib
